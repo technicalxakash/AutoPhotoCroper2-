@@ -177,7 +177,7 @@ os.makedirs(output_folder, exist_ok=True)
 os.makedirs(faulty_folder, exist_ok=True)
 
 PASSPORT_WIDTH = 413
-PASSPORT_HEIGHT = 531
+PASSPORT_HEIGHT = 500
 
 EYE_TILT_THRESHOLD = 4
 BODY_TILT_THRESHOLD = 4
@@ -196,25 +196,8 @@ face_mesh = mp_face_mesh.FaceMesh(static_image_mode=True)
 # RESIZE WITH PADDING
 # ==============================
 
-def resize_with_padding(img, target_w, target_h):
-
-    h, w = img.shape[:2]
-
-    scale = min(target_w / w, target_h / h)
-
-    new_w = int(w * scale)
-    new_h = int(h * scale)
-
-    resized = cv2.resize(img, (new_w, new_h))
-
-    canvas = np.full((target_h, target_w, 3), (255,255,255), dtype=np.uint8)
-
-    x_offset = (target_w - new_w)//2
-    y_offset = (target_h - new_h)//2
-
-    canvas[y_offset:y_offset+new_h, x_offset:x_offset+new_w] = resized
-
-    return canvas
+def resize_exact(img, target_w, target_h):
+    return cv2.resize(img, (target_w, target_h), interpolation=cv2.INTER_CUBIC)
 
 
 # ==============================
@@ -325,7 +308,7 @@ def align_and_crop(image):
     if cropped.size == 0:
         return None, "crop_error"
 
-    final = resize_with_padding(cropped, PASSPORT_WIDTH, PASSPORT_HEIGHT)
+    final = resize_exact(cropped, PASSPORT_WIDTH, PASSPORT_HEIGHT)
 
     return final, "ok"
 

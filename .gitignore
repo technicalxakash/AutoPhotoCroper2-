@@ -1,1 +1,8 @@
 venv
+input_images
+output_passport
+faulty_cropped
+faulty_images
+manual_crop
+manual_originals
+selected_images
