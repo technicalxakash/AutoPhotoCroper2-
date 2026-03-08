@@ -25,4 +25,5 @@ for file in os.listdir(manual_folder):
     else:
         print("Original not found:", file)
 
+
 print("Done ✅")
